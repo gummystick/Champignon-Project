@@ -36,11 +36,22 @@ class sequentie:
         print('Sequentie =', self._sequentie)
         print('Type =', self._type)
 
-class data:
+class seq_data:
     def __init__(self, fwd_bestandnaam, rev_bestandnaam):
-        self._data = []
+        self.data = []
+        self.index = 0
         self.__readFile__(fwd_bestandnaam)
         self.__readFile__(rev_bestandnaam)
+        
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.index == len(self.data):
+            raise StopIteration
+        index = self.index
+        self.index += 1
+        return self.data[index]
         
     def __readFile__(self, bestandnaam):
         with open(bestandnaam, 'r') as bestand:
@@ -56,14 +67,15 @@ class data:
                     seq = regel
                 if regelnummer == 3:
                     kwaliteitsscore = regel
-                    self._data.append(sequentie(sequentie_id, kwaliteitsscore, seq, type_seq))
+                    self.data.append(sequentie(sequentie_id, kwaliteitsscore, seq, type_seq))
             bestand.close()
             
     def getData(self):
-        return self._data
+        return self.data
         
 def main():
-    champignon_data = data('@HWI-M02942_file1.txt', '@HWI-M02942_file2.txt')
-    champignon_data.getData()[0].summary()
+    champignon_data = seq_data('@HWI-M02942_file1.txt', '@HWI-M02942_file2.txt')
+    for sequentie in champignon_data:
+        sequentie.summary()
     
 main()
