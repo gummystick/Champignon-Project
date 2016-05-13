@@ -5,8 +5,8 @@
  Bronnen: Geen
  Auteur: William Sies en Alex Staritsky
  Datum: Thu May 12 12:36:07 2016
- Versie: 1.2
- Updates: Geen
+ Versie: 1.4
+ Updates: Zie github
  © Copyright
  
 """
@@ -39,11 +39,11 @@ class sequentie:
 class seq_data:
     def __init__(self, fwd_bestandnaam, rev_bestandnaam):
         self.data = []
-        self.index = 0
         self.__readFile__(fwd_bestandnaam)
         self.__readFile__(rev_bestandnaam)
         
     def __iter__(self):
+        self.index = 0
         return self
     
     def __next__(self):
@@ -76,6 +76,6 @@ class seq_data:
 def main():
     champignon_data = seq_data('@HWI-M02942_file1.txt', '@HWI-M02942_file2.txt')
     for sequentie in champignon_data:
-        sequentie.summary()
+        print(sequentie.getValue('sequentie_id'))
     
 main()
