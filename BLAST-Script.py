@@ -11,6 +11,20 @@
  
 """
 
+class settings:
+    def __init__(self, bestandnaam):
+        self.settings = []
+        with open(bestandnaam, 'r') as bestand:
+            for regel in bestand:
+                if regel[0] != '#' and regel != '':
+                    self.settings.append(regel[regel.find(': ')+1:].replace('\n','').replace('\t','').replace(' ',''))            
+
+    def get(self, setting):
+        try:
+            return self.settings[setting]
+        except IndexError:
+            raise Exception('Deze setting bestaat niet of is niet in het bestand opgenomen!')
+            
 class sequentie:
     def __init__(self, sequentie_id, kwaliteitsscore, sequentie, type_seq):
         self._sequentie_id = sequentie_id
@@ -74,7 +88,8 @@ class seq_data:
         return self.data
         
 def main():
-    champignon_data = seq_data('@HWI-M02942_file1.txt', '@HWI-M02942_file2.txt')
+    parameters = settings('Auto_BLAST_settings.settings')
+    champignon_data = seq_data(parameters.get(0), parameters.get(1))
     for sequentie in champignon_data:
         print(sequentie.getValue('sequentie_id'))
     
