@@ -3,11 +3,11 @@
 	reverse_sequences: @HWI-M02942_file2.txt
 	log_file: log.txt
 	e-value: 0.01
-	
+
 # progress
 	proces_number: 0
 	sequence_id: None
-	
+
 # blastn
 	database: nr
 	algoritme: blastn
@@ -16,7 +16,7 @@
 	mask_lookup_only: True
 	match_mismatch_score: 1,-2
 	gap_costs: linear
-	
+
 # blastx
 	database: nr
 	matrix: BLOSUM62
