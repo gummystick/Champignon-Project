@@ -18,7 +18,7 @@ class settings:
         self.bestandnaam = bestandnaam
         with open(self.bestandnaam, 'r') as bestand:
             for regel in bestand:
-                if regel[0] != '#' and regel != '':
+                if regel[0] != '#' and regel.replace('\n','').replace('\t','').replace(' ','') != '':
                     self.settings.append(regel[regel.find(': ')+1:].replace('\n','').replace('\t','').replace(' ',''))            
 
     def get(self, setting):
@@ -116,7 +116,7 @@ def main():
     champignon_data = seq_data(parameters.get(0), parameters.get(1))
     program_log = log(parameters.get(2))  
     
-    champignon_data.set_loop(parameters.get(5))
+    champignon_data.set_loop(parameters.get(4))
     for sequentie in champignon_data:
         for type_blast in ['blastn', 'blastx', 'tblastx']:
             try:
