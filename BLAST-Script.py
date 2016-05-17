@@ -94,3 +94,20 @@ def main():
     d.check()
     
 main()
+#SQL connector juiste instellingen vanaf de server geen last van firewall.
+
+import mysql.connector
+
+def main():
+	data = datasearch()
+	bestand(data)
+def datasearch():
+    conn = mysql.connector.connect(host="cytosine.nl", user="owe4_bi1e_2", db="owe4_bi1e_2", password='blaat1234')
+    cursor = conn.cursor()
+    cursor.execute ("""INSERT INTO `BLAST_resultaat__informatie`(`Bit_score`, `Score`, `Identity`, `Gaps`, `Query_coverage`, `Identity_percentage`, `Max_Score`, `Total_Score`, `Frame`, `Organisme`, `Eiwit`, `Resultaat_ID`) VALUES ([273],[200],[100],[2],[100],[100],[200],[300],[2],[Homo_Sapiens],[Protje],[007])""")
+    rows = cursor.fetchall ()
+    cursor.close ()
+    conn.close()
+    return rows
+
+main()
