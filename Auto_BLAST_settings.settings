@@ -6,10 +6,11 @@
 
 # progress
 	proces_number: 0
+	function: blastn
 	sequence_id: None
 
 # blastn
-	database: nr
+	database: nrs
 	algoritme: blastn
 	expect_threshold: 10
 	low_complexity: True
