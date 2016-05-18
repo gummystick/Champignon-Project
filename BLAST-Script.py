@@ -12,6 +12,7 @@
 import Bio
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
+import mysql.connector
 
 class sequentie:
     def __init__(self, sequentie_id, kwaliteitsscore, sequentie, type_seq):
@@ -88,26 +89,23 @@ class Blast_data:
             record_handle = NCBIWWW.qblast(program, database, sequence, expect='', gapcosts='', matrix_name='')
         return
         
+#SQL connector juiste instellingen vanaf de server geen last van firewall.
+def datasearch():
+	conn = mysql.connector.connect(host="localhost", user="owe4_bi1e_2", db="owe4_bi1e_2", password='blaat1234')
+	cursor = conn.cursor()
+	cursor.execute ("""INSERT INTO `BLAST_resultaat__informatie`(`E_value`, `Bit_score`, `Score`, `Identity`, `Gaps`, `Query_coverage`, `Identity_percentage`, `Max_Score`, `Total_Score`, `Frame`, `Organisme`, `Eiwit`) 
+	VALUES (0.0001,273,200,50,2,75,99,274,234,-2,'Homo_sapien','Protje')""")
+	#row = cursor.fetchall ()
+	conn.commit()
+	cursor.close ()
+	conn.close()
+	print("Query executed")
+	#print(row)
+	return #row
 def main():
     bestand_data = seq_data('@HWI-M02942_file1.txt', '@HWI-M02942_file2.txt')
     d = Blast_data(bestand_data)
     d.check()
+    data = datasearch()
     
-main()
-#SQL connector juiste instellingen vanaf de server geen last van firewall.
-
-import mysql.connector
-
-def main():
-	data = datasearch()
-	bestand(data)
-def datasearch():
-    conn = mysql.connector.connect(host="cytosine.nl", user="owe4_bi1e_2", db="owe4_bi1e_2", password='blaat1234')
-    cursor = conn.cursor()
-    cursor.execute ("""INSERT INTO `BLAST_resultaat__informatie`(`Bit_score`, `Score`, `Identity`, `Gaps`, `Query_coverage`, `Identity_percentage`, `Max_Score`, `Total_Score`, `Frame`, `Organisme`, `Eiwit`, `Resultaat_ID`) VALUES ([273],[200],[100],[2],[100],[100],[200],[300],[2],[Homo_Sapiens],[Protje],[007])""")
-    rows = cursor.fetchall ()
-    cursor.close ()
-    conn.close()
-    return rows
-
 main()
