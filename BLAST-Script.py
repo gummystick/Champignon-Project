@@ -10,7 +10,12 @@
  © Copyright
  
 """
+
+from Bio.Blast import NCBIWWW
+from Bio.Blast import NCBIXML
+import Bio
 import time
+import mysql.connector
 
 class settings:
     def __init__(self, bestandnaam):
@@ -27,13 +32,14 @@ class settings:
         except IndexError:
             raise Exception('Deze setting bestaat niet of is niet in het bestand opgenomen!')
     
-    def set_progress(self, proces_number, sequentie_id):
+    def set_progress(self, proces_number, function, sequentie_id):
         with open(self.bestandnaam, 'r') as bestand:
             settings = bestand.readlines()
             bestand.close()
         with open(self.bestandnaam, 'w') as bestand:
             settings[7] = '	proces_number: {0}\n'.format(str(proces_number))
-            settings[8] = '	sequence_id: {0}\n'.format(str(sequentie_id))
+            settings[8] = '	function: {0}\n'.format(str(function))
+            settings[9] = '	sequence_id: {0}\n'.format(str(sequentie_id))
             bestand.writelines(settings)
             bestand.close()
 
@@ -110,42 +116,100 @@ class seq_data:
     
     def get_progress(self):
         return self.index
+
+class type_operation:
+    def __init__(self):
+        self.operations = ['blastn', 'blastx', 'tblastx', 'save_data']
+        self.index = 0
+        self.resume = False
+        
+    def __iter__(self):
+        if self.resume == False:
+            self.index = 0
+        return self
+        
+    def __next__(self):
+        if self.index == len(self.operations):
+            if self.resume:
+                self.resume = False
+            raise StopIteration
+        index = self.index
+        self.index += 1
+        return self.operations[index]
+        
+    def set_loop(self, index):
+        self.resume = True
+        if index == 'blastn':
+            self.index = 0
+        elif index == 'blastx':
+            self.index = 1
+        elif index == 'tblastx':
+            self.index = 2
+        elif index == 'save_data':
+            self.index = 3
+        else:
+            raise ValueError('Geen of een verkeerde value opgevraagd!')
+
+class Blast_data:
+    def __init__(self, bestand_data):
+        self.bestand_data = bestand_data
+        
+    def Blast(self):
+        program = None
+        database = None
+        sequence = None
+        print(self.bestand_data)
+        for seq in self.bestand_data:
+            record_handle = NCBIWWW.qblast(program, database, sequence, expect='', gapcosts='', matrix_name='')
+        return
+
+#SQL connector juiste instellingen vanaf de server geen last van firewall.
+def datasearch():
+	conn = mysql.connector.connect(host="localhost", user="owe4_bi1e_2", db="owe4_bi1e_2", password='blaat1234')
+	cursor = conn.cursor()
+	cursor.execute ("""INSERT INTO `BLAST_resultaat__informatie`(`E_value`, `Bit_score`, `Score`, `Identity`, `Gaps`, `Query_coverage`, `Identity_percentage`, `Max_Score`, `Total_Score`, `Frame`, `Organisme`, `Eiwit`) 
+	VALUES (0.0001,273,200,50,2,75,99,274,234,-2,'Homo_sapien','Protje')""")
+	#row = cursor.fetchall ()
+	conn.commit()
+	cursor.close ()
+	conn.close()
+	print("Query executed")
+	#print(row)
+	return #row
         
 def main():
+    # Init objecten
     parameters = settings('Auto_BLAST_settings.settings')
     champignon_data = seq_data(parameters.get(0), parameters.get(1))
-    program_log = log(parameters.get(2))  
+    operations = type_operation()
+    program_log = log(parameters.get(2))
     
+    # Zet de loop goed (om door te gaan als het programma stopte)
     champignon_data.set_loop(parameters.get(4))
+    operations.set_loop(parameters.get(5))
+    
+    # Main loop
     for sequentie in champignon_data:
-        for type_blast in ['blastn', 'blastx', 'tblastx']:
+        for function in operations:
             try:
                 sequentie_id = sequentie.getValue('sequentie_id')
-                if type_blast == 'blastn':
-                    #blastn
-                    print('Blastn:',sequentie_id)
+                print(function+': '+sequentie_id)
+                parameters.set_progress(champignon_data.get_progress(), function, sequentie_id)
+                if function == 'blastn':
+                    # blastn
                     blastn = None
-                    program_log.write("blastn van sequentie '{0}' is gelukt!".format(sequentie_id))
-                elif type_blast == 'blastx':
-                    #blastx
-                    print('Blastx:',sequentie_id)
+                elif function == 'blastx':
+                    # blastx
                     blastx = None
-                    program_log.write("blastx van sequentie '{0}' is gelukt!".format(sequentie_id))
-                elif type_blast == 'tblastx':
-                    #tblastx
-                    print('Tblastx:',sequentie_id)
+                elif function == 'tblastx':
+                    # tblastx
                     tblastx = None
-                    program_log.write("tblastx van sequentie '{0}' is gelukt!".format(sequentie_id))
+                elif function == 'save_data':
+                    # save_data
+                    database = None
+                program_log.write("{0} van sequentie '{1}' is gelukt!".format(function, sequentie_id))
             except Exception as error:
-                program_log.write("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
                 print("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
-        try:
-            #save data to database
-            print('Saving:',sequentie_id)
-            database = None
-        except Exception as error:
-            program_log.write("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
-            print("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
-        parameters.set_progress(champignon_data.get_progress()+1, sequentie_id)
+                program_log.write("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
 
 main()
