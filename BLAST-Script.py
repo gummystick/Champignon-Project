@@ -146,6 +146,6 @@ def main():
         except Exception as error:
             program_log.write("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
             print("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
-        parameters.set_progress(champignon_data.get_progress(), sequentie_id)
+        parameters.set_progress(champignon_data.get_progress()+1, sequentie_id)
 
 main()
