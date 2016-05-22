@@ -7,7 +7,7 @@
  Datum: Thu May 12 12:36:07 2016
  Versie: 2.5
  Updates: Zie github
- © Copyright
+ (c) Copyright
  
 """
 
@@ -16,14 +16,17 @@ from Bio.Blast import NCBIXML
 import time
 import mysql.connector
 
-class settings:
+class settings: 
     def __init__(self, bestandnaam):
         self.settings = []
         self.bestandnaam = bestandnaam
-        with open(self.bestandnaam, 'r') as bestand:
-            for regel in bestand:
-                if regel[0] != '#' and regel.replace('\n','').replace('\t','').replace(' ','') != '':
-                    self.settings.append(regel[regel.find(': ')+1:].replace('\n','').replace('\t','').replace(' ',''))            
+        try:
+            with open(self.bestandnaam, 'r') as bestand:
+                for regel in bestand:
+                    if regel[0] != '#' and regel.replace('\n','').replace('\t','').replace(' ','') != '':
+                        self.settings.append(regel[regel.find(': ')+1:].replace('\n','').replace('\t','').replace(' ','')) 
+        except IOError or FileNotFoundError or UnicodeDecodeError:
+            raise Exception('Settingsbestand niet gevonden, of kan het bestand niet lezen!')
 
     def get(self, setting):
         try:
@@ -32,15 +35,18 @@ class settings:
             raise Exception('Deze setting bestaat niet of is niet in het bestand opgenomen!')
     
     def set_progress(self, proces_number, function, sequentie_id):
-        with open(self.bestandnaam, 'r') as bestand:
-            settings = bestand.readlines()
-            bestand.close()
-        with open(self.bestandnaam, 'w') as bestand:
-            settings[7] = '	proces_number: {0}\n'.format(str(proces_number))
-            settings[8] = '	function: {0}\n'.format(str(function))
-            settings[9] = '	sequence_id: {0}\n'.format(str(sequentie_id))
-            bestand.writelines(settings)
-            bestand.close()
+        try:
+            with open(self.bestandnaam, 'r') as bestand:
+                settings = bestand.readlines()
+                bestand.close()
+            with open(self.bestandnaam, 'w') as bestand:
+                settings[7] = '	proces_number: {0}\n'.format(str(proces_number))
+                settings[8] = '	function: {0}\n'.format(str(function))
+                settings[9] = '	sequence_id: {0}\n'.format(str(sequentie_id))
+                bestand.writelines(settings)
+                bestand.close()
+        except IOError or FileNotFoundError or UnicodeDecodeError:
+            raise Exception('Settingsbestand niet gevonden, of kan het bestand niet lezen!')
 
 class log:
     def __init__(self, bestandnaam):
@@ -52,10 +58,14 @@ class log:
             bestand = open(self.bestandnaam, 'w')
             bestand.write('-'*125+'\nDatum:     | Tijd:    | Event:\n'+'-'*125)
             bestand.close()
+
     def write(self, info):
-        with open(self.bestandnaam, 'a') as bestand:
-            bestand.write('\n{0} | {1} | {2}'.format(time.strftime("%d/%m/%Y"),time.strftime("%H:%M:%S"),str(info)))
-            bestand.close()
+        try:
+            with open(self.bestandnaam, 'a') as bestand:
+                bestand.write('\n{0} | {1} | {2}'.format(time.strftime("%d/%m/%Y"),time.strftime("%H:%M:%S"),str(info)))
+                bestand.close()
+        except IOError or FileNotFoundError or UnicodeDecodeError:
+            raise Exception('Logbestand niet gevonden, of kan het bestand niet lezen!')
         
 class sequentie:
     def __init__(self, sequentie_id, kwaliteitsscore, sequentie, type_seq):
@@ -94,21 +104,24 @@ class seq_data:
         return self.data[index]
         
     def __readFile__(self, bestandnaam):
-        with open(bestandnaam, 'r') as bestand:
-            regelnummer = -1
-            for regel in bestand:
-                regelnummer += 1
-                if regelnummer > 3:
-                    regelnummer = 0
-                if regelnummer == 0:
-                    sequentie_id = regel[1:regel.find('/')]
-                    type_seq = regel[-2]
-                if regelnummer == 1:
-                    seq = regel
-                if regelnummer == 3:
-                    kwaliteitsscore = regel
-                    self.data.append(sequentie(sequentie_id, kwaliteitsscore, seq, type_seq))
-            bestand.close()
+        try:
+            with open(bestandnaam, 'r') as bestand:
+                regelnummer = -1
+                for regel in bestand:
+                    regelnummer += 1
+                    if regelnummer > 3:
+                        regelnummer = 0
+                    if regelnummer == 0:
+                        sequentie_id = regel[1:regel.find('/')]
+                        type_seq = regel[-2]
+                    if regelnummer == 1:
+                        seq = regel
+                    if regelnummer == 3:
+                        kwaliteitsscore = regel
+                        self.data.append(sequentie(sequentie_id, kwaliteitsscore, seq, type_seq))
+                bestand.close()
+        except IOError or FileNotFoundError or UnicodeDecodeError:
+            raise Exception('Kan sequentiebestand niet vinden of lezen!')
             
     def set_loop(self, proces_number):
         self.index = int(proces_number)
@@ -195,7 +208,7 @@ class database:
         self.cursor.close()
         self.connection.close()
         
-    def send_blast_results(self, type_blast, sequentie, parameters, results):
+    def send_blast_results(self, type_blast, sequentie, parameters, blast_record):
         # Create_id's
         self.cursor.execute("SELECT max(Parameters_ID) FROM Resultaat")
         results = self.cursor.fetchall()
@@ -237,11 +250,15 @@ class database:
         self.cursor.execute("""INSERT INTO Resultaat VALUES ('{0}', CURRENT_DATE(), CURRENT_TIME(), NULL, '{1}', {2}, {3}, {4});""".format(query_id, sequentie.getValue('sequentie_id'), resultaat_id , parameters_id, has_results))
         
         # Send eiwitten
-        for alignment in results:
+        for alignment in blast_record:
             for hsp in alignment.hsps:
-                if hsp.expect < parameters.get(float(3)):
-                    self.cursor.execute("""INSERT INTO BLAST_resultaat__informatie VALUES ();""".format())
-           
+                if hsp.expect < float(parameters.get(3)):
+                    if type_blast == 'blastn':
+                        self.cursor.execute("""INSERT INTO BLAST_resultaat__informatie VALUES ('{0}', {1}, {2}, '{3}', '{4}', NULL, NULL, NULL, NULL, NULL, '{5}', '{6}', '{7}', {8});""".format(hsp.expect, hsp.bits, hsp.score, hsp.identities, hsp.gaps, hsp.query+' ; '+hsp.match+' ; '+hsp.sbjct, alignment.title.split('|')[4][:alignment.title.split('|')[4].find('RecName:')].replace(' ','')[5:], alignment.title[alignment.title.find('RecName:'):] , resultaat_id))
+                    if type_blast == 'blastx':
+                        self.cursor.execute("""INSERT INTO BLAST_resultaat__informatie VALUES ('{0}', {1}, {2}, '{3}', '{4}', NULL, NULL, NULL, NULL, '{5}', '{6}', '{7}', '{8}', {9});""".format(hsp.expect, hsp.bits, hsp.score, hsp.identities, hsp.gaps, hsp.frame, hsp.query+' ; '+hsp.match+' ; '+hsp.sbjct, alignment.title.split('|')[4][:alignment.title.split('|')[4].find('RecName:')].replace(' ','')[5:], alignment.title[alignment.title.find('RecName:'):] , resultaat_id))
+                    if type_blast == 'tblastx':
+                        self.cursor.execute("""INSERT INTO BLAST_resultaat__informatie VALUES ('{0}', {1}, {2}, '{3}', '{4}', NULL, NULL, NULL, NULL, '{5}', '{6}', '{7}', '{8}', {9});""".format(hsp.expect, hsp.bits, hsp.score, hsp.identities, hsp.gaps, hsp.frame, hsp.query+' ; '+hsp.match+' ; '+hsp.sbjct, alignment.title.split('|')[4][:alignment.title.split('|')[4].find('RecName:')].replace(' ','')[5:], alignment.title[alignment.title.find('RecName:'):] , resultaat_id))
         # Commit data en close verbinding
         self.connection.commit()
         self.cursor.close()
@@ -272,8 +289,8 @@ def main():
                     NCBI = BLAST()
                     NCBI.do_blast(function, sequentie, parameters)
                     print(NCBI.get_results())
-                    #db = database(parameters)
-                    #db.send_blast_results(function, sequentie, parameters, NCBI.get_results())
+                    db = database(parameters)
+                    db.send_blast_results(function, sequentie, parameters, NCBI.get_results())
                 program_log.write("{0} van sequentie '{1}' is gelukt!".format(function, sequentie_id))
             except Exception as error:
                 print("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
