@@ -1,0 +1,37 @@
+# basic settings
+	forward_sequences: @HWI-M02942_file1.txt
+	reverse_sequences: @HWI-M02942_file2.txt
+	log_file: log.txt
+	e-value: 0.1
+
+# progress
+	proces_number: 0
+	function: save_sequentie
+	sequence_id: None
+	
+# database
+	host: localhost
+	user: owe4_bi1e_2
+	database: owe4_bi1e_2
+	password: blaat1234
+
+# blastn
+	database: nr
+	expect_threshold: 1
+	low_complexity: True
+	mask_lookup_only: True
+
+# blastx
+	database: nr
+	matrix: BLOSUM62
+	expect_threshold: 1
+	low_complexity: True
+	mask_lookup_only: False
+	gap_costs: 11,1
+
+# tblastx
+	database: nr
+	matrix: BLOSUM62
+	expect_threshold: 1
+	low_complexity: True
+	mask_lookup_only: False
