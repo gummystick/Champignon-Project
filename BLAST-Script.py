@@ -288,7 +288,6 @@ def main():
                 elif function in ['blastn', 'blastx', 'tblastx']:
                     NCBI = BLAST()
                     NCBI.do_blast(function, sequentie, parameters)
-                    print(NCBI.get_results())
                     db = database(parameters)
                     db.send_blast_results(function, sequentie, parameters, NCBI.get_results())
                 program_log.write("{0} van sequentie '{1}' is gelukt!".format(function, sequentie_id))
