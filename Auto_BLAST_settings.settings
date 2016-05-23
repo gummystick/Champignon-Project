@@ -35,3 +35,7 @@
 	expect_threshold: 1
 	low_complexity: True
 	mask_lookup_only: False
+	
+# range_data
+	start: HWI-M02942:21:000000000-ACNW4:1:1101:20328:1911
+	end: HWI-M02942:21:000000000-ACNW4:1:1101:13181:2015
