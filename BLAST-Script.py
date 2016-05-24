@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 
  Titel: Auto BLAST
@@ -274,19 +275,19 @@ class database:
                     identity_perc = float(float(hsp.identities)/float(total_aligned))*100
                     positives_perc = float(float(hsp.positives)/float(total_aligned))*100
                     try:
-                        organisme_eiwit_info = alignment.hit_def.encode('utf-8')
+                        organisme_eiwit_info = str(alignment.hit_def.encode('utf-8'))
                     except AttributeError:
                         organisme_eiwit_info = 'NULL'
                         print("Unicode object bij sequentie '{0}': 'organisme_eiwit_info'".format(sequentie.getValue('sequentie_id')))
                         program_log.write("Unicode object bij sequentie '{0}: 'organisme_eiwit_info'".format(sequentie.getValue('sequentie_id')))
                     try:
-                        organisme_eiwit_ID = alignment.hit_id.encode('utf-8')
+                        organisme_eiwit_ID = str(alignment.hit_id.encode('utf-8'))
                     except AttributeError:
                         organisme_eiwit_ID = 'NULL'
                         print("Unicode object bij sequentie '{0}': 'organisme_eiwit_ID'".format(sequentie.getValue('sequentie_id')))
                         program_log.write("Unicode object bij sequentie '{0}: 'eiwit_ID'".format(sequentie.getValue('sequentie_id')))
                     try:
-                        organisme_eiwit_title = alignment.title.encode('utf-8')
+                        organisme_eiwit_title = str(alignment.title.encode('utf-8'))
                         print("Unicode object bij sequentie '{0}': 'organisme_eiwit_title'".format(sequentie.getValue('sequentie_id')))
                         program_log.write("Unicode object bij sequentie '{0}: 'organisme_eiwit_title'".format(sequentie.getValue('sequentie_id')))
                     except AttributeError:
@@ -334,9 +335,7 @@ def main():
             except Exception as error:
                 print("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
                 program_log.write("Error bij sequentie '{0}': '{1}'".format(sequentie_id, error))
-                champignon_data.set_loop(parameters.get(4))
-                operations.set_loop(parameters.get(5))
-                print('5 minuten wachten tot nieuwe poging...')
-                time.sleep(300)
-
+                print('30 seconden wachten tot nieuwe poging...')
+                time.sleep(30)
+                
 main()
