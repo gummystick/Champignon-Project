@@ -1,43 +1,46 @@
 body {
 	background: url("http://hdimagesnew.com/wp-content/uploads/2015/08/DNA-HD-Wallpaper-1.jpg") no-repeat fixed right center;
 }
-.global {
-	font-family:Arial;
-	background-color: transparent;
+.menu{
+	background-color: black;
+	width: 30%;
 }
-.global > h1{
-	background-color: #cccccc;
-	text-align: center;
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    padding: 15px;
+	width: 140px;
 }
-.dropdown > select{
-	background: #cccccc;
+.menu ul {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+.menu ul li {display: inline-block;}
+.menu ul li:hover {background: #555;}
+.menu ul li:hover ul {display: block;}
+.menu ul li ul {
+  position: absolute;
+  width: 170px;
+  display: none;
+
+}
+.menu ul li ul li { 
+  background: #555; 
+  display: block; 
+
+}
+.menu ul li ul li a {display:block !important;} 
+.menu ul li ul li:hover {background: #666;}
+.menu ul li ul{
+  border-width: 2px;
+  border-style: solid;
+  border-collapse: collapse;
+  border-color: blue;
+}
+caption {
 	border-style: solid;
-	border-color: purple;
-
+	border-width: 1px;
+	font-weight: bold;
 }
-.textarea > textarea {
-	width: 100%;
-	height: 20%;
-	max-height: 30%; 
-}
-h1 {
-	color: blue;
-}
-marquee {
-	width: 90%;
-	height: 90%;
-
-}
-.introtext {
-	border: 5px  solid navy;
-	margin: 2% 25% 2% 25%;
-	text-align: center;
-	background-color: #cccccc
-}
-.introtext > p {
-	text-align: left;
-}
-.radiobuttons {
-	border: 1px grey;
-}
-
