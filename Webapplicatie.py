@@ -1,12 +1,14 @@
 """
+
 Title: HTML-Python voor webinterface
-Beschrijving: Zie title
-Bronnen:-
+Beschrijving: Zie titel
+Bronnen: Geen
 Auteurs: Alex Staritsky en William Sies
-Datum:Donderdag 10 mei 2016 - ?
-Versie:1
-Updates:-
-Copyright
+Datum: Donderdag 10 mei 2016 - ?
+Versie: 1.0
+Updates: Zie Github
+(c) Copyright
+
 """
 
 import mysql.connector
@@ -19,19 +21,16 @@ def index(req):
 	req.write(Questionform())
 
 def BLAST_Resultaat(req, check='1', radiobutton='1'):
-	
 	req.content_type = 'text/html'
 	req.write(head())
 	req.write(bovenmenu())
-	req.write("""<h1>Hier komen resutlaten</h1>""")
+	req.write("""<h1>Hier komen resultaten</h1>""")
 
 def Sequentie_Informatie(req):
 	req.content_type = 'text/html'
 	req.write(head())
 	req.write(bovenmenu())
-	req.write(Sequentie_Informatie_Table(req))
-	
-	
+	Sequentie_Informatie_Table(req)
 
 def BLAST_Informatie(req):
 	req.content_type = 'text/html'
@@ -75,20 +74,18 @@ def tablelog(query):
 	conn = mysql.connector.connect(host="localhost", user="owe4_bi1e_2", db="owe4_bi1e_2", password='blaat1234')
 	cursor = conn.cursor()
 	cursor.execute (query)
-	row = cursor.fetchall ()
-	cursor.close ()
+	row = cursor.fetchall()
+	cursor.close()
 	conn.close()
 	return row
 
-def Organismeeiwit():
-	return """SELECT `Organisme_eiwit_info` FROM `BLAST_resultaat__informatie`"""
-
 def Questionform():
 	orgs = ''
-	for row in tablelog(Organismeeiwit()):
+	organisme_eiwit = tablelog("SELECT Organisme_eiwit_info FROM BLAST_resultaat__informatie")
+	for row in organisme_eiwit:
 		orgs += '<option value={0}> {0}</option>'.format(row[0])
 	eggs = ''
-	for row in tablelog(Organismeeiwit()):
+	for row in organisme_eiwit:
 		eggs += '<option value={0}> {0}</option>'.format(row[0])
 	return """<form value='information' action='http://cytosine.nl/~owe4_bi1e_2/Python/HTMLWebinterface.py/BLAST_Resultaat' id='filter'>
 	<p>Organisme:</p>
@@ -151,7 +148,6 @@ def BLAST_Informatie_Table(req):
 				req.write('<td>'+new_data+'</td>')
 		req.write('</tr>')
 	req.write('</table>')
-	return
 
 def Sequentie_Informatie_Table(req):
 	conn = mysql.connector.connect(host='localhost', user='owe4_bi1e_2', db='owe4_bi1e_2', password='blaat1234')
@@ -184,4 +180,3 @@ def Sequentie_Informatie_Table(req):
 				req.write('<td>'+new_data+'</td>')
 		req.write('</tr>')
 	req.write('</table>')
-	return
