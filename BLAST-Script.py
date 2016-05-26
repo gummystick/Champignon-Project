@@ -130,7 +130,7 @@ class seq_data:
     
     def __filterData__(self, data, parameters):
         startReading = False
-        for sequentie in self.data:
+        for sequentie in data:
             if sequentie.getValue('sequentie_id') == parameters.get(26):
                 startReading = True
             if startReading:
