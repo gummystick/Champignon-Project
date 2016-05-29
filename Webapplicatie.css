@@ -1,9 +1,23 @@
 body {
 	background: url("http://hdimagesnew.com/wp-content/uploads/2015/08/DNA-HD-Wallpaper-1.jpg") no-repeat fixed right center;
 }
+
+h1 {
+	text-align: left;
+	font-family: "Segoe UI",Arial,sans-serif;
+}
+.title > h1{
+	text-align: center;
+	border-style: outset;
+	border-radius: 20px;
+	border-width: 5px;
+	background-color: #4FBCE0;
+	padding: 0.5%;
+	text-shadow: -5px 4px 3px #848A8C;
+}
 .menu{
 	background-color: black;
-	width: 30%;
+	width: 100%;
 }
 .menu a {
     text-decoration: none;
@@ -39,8 +53,50 @@ body {
   border-collapse: collapse;
   border-color: blue;
 }
-caption {
+.table_options {
+	background-color: #e0e0eb;
 	border-style: solid;
+	border-color: #808080;
+	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	
+}
+.table_options input {
+	background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.table table {
 	border-width: 1px;
-	font-weight: bold;
+	border-style: solid;
+	border-color: black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table th, td {
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+    text-align: left;
+    padding: 8px;
+}
+
+.table tr:nth-child(even){
+	background-color: #f2f2f2
+}
+
+.table tr:nth-child(odd) {
+	background-color: #ffffff
+}
+
+.table th {
+    background-color: #4CAF50;
+    color: white;
 }
