@@ -6,6 +6,18 @@ h1 {
 	text-align: left;
 	font-family: "Segoe UI",Arial,sans-serif;
 }
+
+.button input{
+	background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
 .title > h1{
 	text-align: center;
 	border-style: outset;
