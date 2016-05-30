@@ -1,17 +1,19 @@
 """
 Title: HTML-Python voor webinterface
 Beschrijving: Zie titel
-Bronnen: Geen
+Bronnen: http://www.w3schools.com/
 Auteurs: Alex Staritsky en William Sies
 Datum: Donderdag 10 mei 2016 - ?
 Versie:	2.0
 Updates: Zie Github
 @ Copyright
 """
-
+#importeert de library's voor mysql en apache.
 import mysql.connector
 from mod_python import apache
-
+#De index functie is de homepage van de webapplicatie.
+#Hierin worden als standaard de head, title en bovenmenu functies opgeroepen voor het standaard uiterlijk.
+#Als laatst word de questionform functie aangeroepen waarin de filters ingesteld kunnen worden voor de blast resultaten pagina.
 def index(req):
 	titel = 'BLAST results from Champignondataset'
 	req.content_type = 'text/html'
@@ -19,6 +21,10 @@ def index(req):
 	req.write(title(titel))
 	req.write(bovenmenu())
 	req.write(Questionform())
+
+#Op deze pagina is de tabel met alle sequentie informatie te zien.
+#Deze pagina heeft weer de vaste functies voor de head, titel en bovenmenu.
+#De tabel wordt gecreerd door een query generator functie en de sequentie_informatie_tabel.
 
 def Sequentie_Informatie(req, sequentie='', sequentieid='', type=''):
 	titel = 'Sequentie informatie tabel'
@@ -28,7 +34,10 @@ def Sequentie_Informatie(req, sequentie='', sequentieid='', type=''):
 	req.write(bovenmenu())
 	queryline = queryseqi(sequentie, sequentieid, type)
 	Sequentie_Informatie_Table(req, queryline)
-	
+
+#Deze pagina bevat de tabel met alle BLAST resultaten.
+#Net als de sequentie_informatie pagina worden de vaste functie gebruikt.
+#De tabel wordt ook met een query generator en de BLAST_Resultaten_Table gemaakt.
 def BLAST_Resultaten(req, sequentieid='', typeblast='', e_value='', bit_score='', gaps='', ident_perc='', posit_perc='', accessiecode='', org_eiwit='', show_unicode=''):
 	titel = 'BLAST Resultaten tabel'
 	req.content_type = 'text/html'
@@ -38,6 +47,7 @@ def BLAST_Resultaten(req, sequentieid='', typeblast='', e_value='', bit_score=''
 	queryline = queryblastr(sequentieid, typeblast, e_value, bit_score, gaps, ident_perc, posit_perc, accessiecode, org_eiwit, show_unicode)
 	BLAST_Resultaten_Table(req, queryline)
 
+#De opbouw van deze pagina is gelijk aan de BLAST_resultaten alleen bevat de tabel andere informatie.
 def BLAST_Informatie(req, sequentieid='', typeblast='', hasresults='', datum='', masklookup=''):
 	titel = 'BLAST Informatie tabel'
 	req.content_type = 'text/html'
@@ -46,7 +56,8 @@ def BLAST_Informatie(req, sequentieid='', typeblast='', hasresults='', datum='',
 	req.write(bovenmenu())
 	queryline = queryblasti(sequentieid, typeblast, hasresults, datum, masklookup)
 	BLAST_Informatie_Table(req, queryline)
-
+#Dit is de laatste pagina die gecreerd wordt.
+#Het bevat de standaard head, titel en bovenmenu functies en verder wordt er informatie gegeven over het project.
 def Het_Project(req):
 	titel = 'Het project'
 	req.content_type = 'text/html'
@@ -57,7 +68,7 @@ def Het_Project(req):
 	<h2> Wat is er tevinden?</h2>
 	<h2> Wat is het champignon project?</h2>
 	<h2> Bronnen:</h2>""")
-	
+#Deze functie maakt de standaard verbinding met de stylessheet. De functie wordt apart in elke functie opgeroepen als deze nodig is.	
 def head():
 	return """<html>
     <head>
@@ -65,6 +76,8 @@ def head():
 	<title>BLAST results champignon dataset</title>
     </head>"""
 
+#Deze functie genereerd de bovenmenu.
+#Deze kan op elke pagina apart aangeroepen worden. Het bovenmenu bevat een dropdownmenu met de links naar elke pagina.
 def bovenmenu():
 	return """<body>
 	<div class="menu">
@@ -89,9 +102,11 @@ def bovenmenu():
 			</li>
 		</ul>
 	</div>"""
+#Deze functie returnt per pagina een aparte titel. De naam wordt in de pagina functie apart aangegeven.
 def title(titel):
 	return """<div class='title'><h1>"""+titel+"""</h1></div>"""	
-
+#Deze functie bevat de inloggegevens voor de database en bevat de methode om de informatie uit de database op te halen.
+#De query die uitgevoerd wordt is voor elke functie apart gegenereerd of aangegeven.
 def tablelog(query):
 	conn = mysql.connector.connect(host="localhost", user="owe4_bi1e_2", db="owe4_bi1e_2", password='blaat1234')
 	cursor = conn.cursor()
@@ -101,7 +116,16 @@ def tablelog(query):
 	conn.close()
 	return row
 
-
+#Deze functie genereerd het filterformulier voor de blast resultaten pagina.
+#Per filter die word ingevuld veranderd de query die gestuurd word naar de database.
+#Er kan gefilterd worden op sequentie_id hierbij wordt elk sequentie id in een andere functie opgehaald 
+#en op de juiste manier gereturnt zodat de alle sequentie id's geselecteerd kunnen worden.
+#Ook kan er op type blast gefilterd worden dit zijn er maar drie.
+#De e-value filter wordt ook gegenereerd met een aparte functie die alle opties returnt.
+#De bit score wordt gefilterd op vast gestelde hoeveelheden dus alles boven een bepaalde waarde.
+#Identity_percentage wordt gefilterd op alles boven een specifiek opgegeven waarde.
+#Er kan ook een enkele accessiecode geselecteerd worden die in een aparte functie opgehaald worden.
+#Als laatste kan er een specifiek organisme/eiwit geselecteerd worden die ook in een aparte functie opgehaald en gereturnt worden.
 
 def Questionform():
 	return """<form value='information' action='http://cytosine.nl/~owe4_bi1e_2/Python/HTMLWebinterface.py/BLAST_Resultaten' id='filter'>
@@ -113,6 +137,7 @@ def Questionform():
 	In de 'Sequentie Informatie tabel' kunt u de sequenties terugvinden die gebruikt zijn en de kwaliteitsscore staat hier ook in vermeld.<br>
 	Verder kunt u op deze website nog informatie vinden over het project zelf onder het kopje 'Het project'.</p>
 	</div>
+	<div class='formset'>
 	<h3>Filter Formulier BLAST resultaten.</h3>
 	<h4>Sequentie_ID:</h4>
 	<select name='sequentieid' id='sequentieid'>
@@ -137,11 +162,11 @@ def Questionform():
 	<select name='gaps' id='gaps'>
 	<option value=''></option>
 	<option value='0'>0</option>
-	<option value='5'>< 5</option>
-	<option value='10'>< 10</option>
-	<option value='15'>< 15</option>
-	<option value='25'>< 25</option>
-	<option value='100'>< 100</option>
+	<option value='5'>5 ></option>
+	<option value='10'>10 ></option>
+	<option value='15'>15 ></option>
+	<option value='25'>25 ></option>
+	<option value='100'>100 ></option>
 	</select>
 	<h4>Identity Percentage:</h4>
 	<input type='text' name='ident_perc' value=''>
@@ -156,11 +181,25 @@ def Questionform():
 	<option value=''></option>
 	"""+orgs()+"""
 	</select><br><br>
-	<div class='button'>
 	<input type='submit' name='klik' value='Search'>
 	</div>
 	</form>"""
-	
+#De blast_resultaten_table functie returnt een volledige tabel naar de pagina blast resultaten.
+#Hiervoor wordt eerst een query opgegeven die gegenereerd is aan de hand van filter instellingen.	
+#Er wordt geconnecteerd aan de database en de gegevens worden opgehaald.
+#Hierna wordt de tabel gemaakt en wordt voor bepaalde rijen filters gemaakt zodat de query aangepast kan worden.
+#Gefilterd kan worden op:
+#- Sequentie ID: Een specifiek sequetie id kan geselecteerd worden voor generatie: zie 'ids' functie.
+#- Type BLAST: blastn, blastx of tblastx.
+#- E-value: Er kunnen verschillende opties geselecteerd worden waarbij de resultaten kleiner dan de opgegeven waar weergeven worden,
+#zie 'options' functie.
+#- Bitscore: Alleen resultaten groter dan de input van de gebruiker worden weergeven.
+#- Gaps: Alles kleiner dan een bepaalde invoer. De opties waaruit gekozen kan worden zijn aangegeven.
+#- Indentity percentage/ Positive percentage: Alles groter dan de input van de gebruiker wordt in de tabel weergeven.
+#- Accessiecode: Een specifieke accessiecode kan geselecteerd worden zie functie codes.
+#- Organisme/Eiwit: Een specifiek organisme/eiwit kan geselecteerd worden zie functie 'orgs'.
+#De tabel word gegenereerd in een for loop. 
+#Hierin wordt elke rij gegenereerd en in een tweede for loop wordt de tabel data in elke rij toegevoegd.
 def BLAST_Resultaten_Table(req, queryline):
 	conn = mysql.connector.connect(host='localhost', user='owe4_bi1e_2', db='owe4_bi1e_2', password='blaat1234')
 	cursor = conn.cursor()
@@ -170,7 +209,6 @@ def BLAST_Resultaten_Table(req, queryline):
 
 	cursor.close()
 	conn.close()
-	req.write(queryline)
 	req.write('<div class="table_options">')
 	req.write("""<table><form value='filter' action='http://cytosine.nl/~owe4_bi1e_2/Python/HTMLWebinterface.py/BLAST_Resultaten' id='filter'>
 	<th align='left'><input type='submit' name='Filter' value='Filter'></th><th>Show Unicode:<input type='checkbox' name='show_unicode' value='1'></table></div>
@@ -249,7 +287,16 @@ def BLAST_Resultaten_Table(req, queryline):
 					req.write('<td>'+str_data+'</td>')
 	req.write('</tr>')
 	req.write('</div></table>')
-	
+#De blast informatie tabel returnt een tabel met alle blast informatie. 
+#Deze wordt net als bij de blast resultaten tabel gegenereerd door te connecteren aan de database,
+#waarbij een query uitgevoerd word die gegenereerd is aan de hand van de filter behorende bij deze tabel.
+#De data uit de query wordt verwerkt in een geneste for loop. de eerste for loop creert de rijen de tweede zorgt voor de data in de rijen.
+#De filters voor deze tabel zijn:
+#- Sequentie ID: Een specifiek sequetie id kan geselecteerd worden voor generatie: zie 'ids' functie.
+#- Type BLAST: blastn, blastx of tblastx.
+#- Has Results: Yes/No. Laat zien of een blast resultaat heeft.
+#- Datum: De opties worden gegenereerd in de 'dates' functie. Alle resultaten op een specifieke dag weergeven.
+#- Mask lookup only: Enabled/Disabled. Laat zien of deze parameter bij de blast ingesteld is.
 def BLAST_Informatie_Table(req, queryline):
 	conn = mysql.connector.connect(host='localhost', user='owe4_bi1e_2', db='owe4_bi1e_2', password='blaat1234')
 	cursor = conn.cursor()
@@ -316,7 +363,11 @@ def BLAST_Informatie_Table(req, queryline):
 	req.write('</table>')
 	req.write('</div>')
 	return
-
+#De sequentie informatie tabel wordt ook gegenereerd door een query afhankelijk van filters en een for loop die de tabel genereerd.
+#De filters voor deze tabel zijn:
+#- Type: Forward/Revers. Laat alleen resultaten van de geselecteerde optie zien.
+#- Sequentie ID: Een specifiek sequetie id kan geselecteerd worden voor generatie: zie 'ids' functie.
+#- Sequentie: Een specifiek deel uit de sequentie kan ingevoerd worden waarop gefilterd wordt.
 def Sequentie_Informatie_Table(req, queryline):
 	conn = mysql.connector.connect(host='localhost', user='owe4_bi1e_2', db='owe4_bi1e_2', password='blaat1234')
 	cursor = conn.cursor()
@@ -365,7 +416,10 @@ def Sequentie_Informatie_Table(req, queryline):
 	req.write('</table>')
 	req.write('</div>')
 	return
-
+#De functie ids returnt de sequentie identifiers.
+#De functie dates returnt de dates waarop een blast is uitgevoerd.
+#De functie codes returnt alle accessiecodes.
+#Bij alle functies word elke optie wordt in een html option tag gezet zodat deze in de dropdownmenu als keuze naarvoren komt. 
 def ids():
 	opties = ''
 	for id in tablelog("""SELECT Sequentie_identifier FROM Sequentie_informatie GROUP BY Sequentie_identifier""" ):
@@ -383,20 +437,27 @@ def codes():
 	for code in tablelog("""SELECT Organisme_eiwit_ID FROM BLAST_resultaat__informatie GROUP BY Organisme_eiwit_ID"""):
 		codes += '<option value={0}> {0}</option>'.format(code[0])
 	return codes
-	
+#De orgs functie haalt alle organisme/eiwit namen op en zorgt ervoor dat ze een maximale lengte van 60 tekens hebben.
+#Elke optie wordt in een option tag gereturnt voor het dropdownmenu.	
 def orgs():
-#Org_egg deel naam upper/lower?
 	orgs = ''
 	for row in tablelog("""SELECT `Organisme_eiwit_info` FROM `BLAST_resultaat__informatie` GROUP BY Organisme_eiwit_info"""):
-		orgs += '<option value={0}> {0}</option>'.format(row[0])
+		if len(row[0]) > 60:
+			orgs += '<option value={0}> {0}</option>'.format(row[0][:60]+'.....')
+		else:
+			orgs += '<option value={0}> {0}</option>'.format(row[0])
+		
 	return orgs
-
+#De options functie zorgt ervoor dat er e-value opties worden aangemaakt voor elke stap van honderd kleiner.(1*10^-3 tot 1*10^-30)
+#Elke optie wordt in een option tag gereturnt zodat alle opties in het dropdown geselecteerd kunnen worden.
 def options():	
 	options = ''
 	for i in range(3, 30):
 		options += '<option value='+str(float(10)**-i)+'>< *10^-'+str(i)+'</option>'
 	return options
-	
+#De functies queryseqi, queryblasti en queryblastr zorgen ervoor dat de query's gegenereerd worden,
+#die ervoor zorgen dat er gefilterd kan worden op parameters.
+#Voor elke parameter die doorgegeven worden komt er een stukje query aan de gehele query.
 def queryseqi(sequentie, sequentieid, type):
 	query = 'SELECT * FROM Sequentie_informatie WHERE 1'
 	if sequentie != '':
