@@ -7,15 +7,96 @@ h1 {
 	font-family: "Segoe UI",Arial,sans-serif;
 }
 
-.button input{
+.info {
+	width: 99.31%;
+	padding: 5px;
+	background: #f2f2f2;
+	border: 2px solid #ccc;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-family: Verdana,sans-serif;
+}
+
+.formset {
+	width: 45%;
+	padding: 5px;
+	background: #f2f2f2;
+	border: 2px solid #ccc;
+	font-family: Verdana,sans-serif;
+}
+
+.formset input[type=submit] {
 	background-color: #4CAF50;
     border: none;
     color: white;
-    padding: 5px 22px;
+    padding: 13px 25px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+}
+
+.formset input[type=text] {
+    width: 24%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 12px 20px 12px 4px;
+}
+
+.formset select[name='sequentieid'] {
+	width: 24%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 12px 20px 12px 4px;
+	-webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+.formset select[name='accessiecode'] {
+	width: 24%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 12px 20px 12px 4px;
+	-webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+.formset select[name='org_eiwit'] {
+	width: 24%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 12px 20px 12px 4px;
+	-webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+.formset select:focus[name='sequentieid'] {
+    width: 57%;
+}
+
+.formset select:focus[name='accessiecode'] {
+    width: 38%;
+}
+
+.formset select:focus[name='org_eiwit'] {
+    width: 90%;
+}
+
+.formset select {
+	width: 12%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 12px 20px 12px 4px;
 }
 
 .title > h1{
@@ -27,7 +108,7 @@ h1 {
 	padding: 0.5%;
 	text-shadow: -5px 4px 3px #848A8C;
 }
-.menu{
+.menu {
 	background-color: black;
 	width: 100%;
 }
@@ -40,10 +121,14 @@ h1 {
 }
 .menu ul {
   display: inline;
-  margin: 0;
   padding: 0;
+  margin-top: 14px;
 }
-.menu ul li {display: inline-block;}
+.menu ul li {
+	display: inline-block;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
 .menu ul li:hover {background: #555;}
 .menu ul li:hover ul {display: block;}
 .menu ul li ul {
