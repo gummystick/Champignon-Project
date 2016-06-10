@@ -65,9 +65,28 @@ def Het_Project(req):
 	req.write(title(titel))
 	req.write(bovenmenu())
 	req.write("""
+	<div class='informatiepagina'>
 	<h2> Wat is er tevinden?</h2>
+	<p>De site is verdeelt in verschillende onderdelen. 
+	Ten eerste de home pagina waarop een formulier ingevuld kan worden om alvast filters in te stellen bij de blast resultaten tabel.
+	Bij de filters staan i'tjes, waarbij informatie verschijnt als er met de cursor overheen bewogen word.
+	Als dit formulier ingevuld is wordt u doorverwezen naar de tabel. Deze tabel is ook te vinden onder het kopje 'BLAST resultaten tabel' in het menu.
+	Verder zijn er nog twee tabellen te vinden met blast informatie en sequentie informatie.(Zie 'BLAST informatie tabel' en 'Sequentie informatie tabel')
+	Hierbij zijn ook specifieke filters in te stellen.
+	En natuurlijk deze pagina('Het project') met informatie over de informatie.
+	Voor vragen of opmerkingen kunt u contact opnemen via het mailadres: info@champignonproject.tk</p>
 	<h2> Wat is het champignon project?</h2>
-	<h2> Bronnen:</h2>""")
+	<p>Het champignon project richt zich op het verbeteren van champignon compost,
+	door te kijken of er een betere benutting is van de micro-organismen in de compost
+	en of hieruit een actief en geaccepteerd bestrijdingsmiddel tegen pathogene micro-organismen ontwikkeld kan worden.
+	De gebruikte mest voor de champignonteelt is onderzocht door het HAN-Biocentre, doormiddel van illumina sequencing is.
+	De verkregen sequenties zijn verder onderzocht in ons deel van het onderzoek.</p>
+	<h2>Ons deel van het onderzoek</h2>
+	Voor de verkregen sequenties is een automatisch blast-script opgesteld die alle sequenties(forward en reverse) op vaste instellingen BLAST met Bio-python.
+	Dit is gedaan om te kunnen achterhalen van welke organismen/eiwitten deze sequenties mogelijk zijn.
+	Alle resultaten zijn in een daarvoor opgestelde database opgeslagen.
+	Deze webinterface is met de database verbonden en haalt hieruit de BLAST-resultaten op.</p>
+	</div>""")
 #Deze functie maakt de standaard verbinding met de stylessheet. De functie wordt apart in elke functie opgeroepen als deze nodig is.	
 def head():
 	return """<html>
@@ -131,57 +150,63 @@ def Questionform():
 	return """<form value='information' action='http://cytosine.nl/~owe4_bi1e_2/Python/HTMLWebinterface.py/BLAST_Resultaten' id='filter'>
 	<div class='info'>
 	<h3>Info</h3>
-	<p>Op deze website kunt u resultaten terug vinden van BLAST gemaakt met nucleotide sequenties uit de dataset van het Champignon-project.<br>
+	<p>Op deze website kunt u resultaten terugvinden van BLAST gemaakt met nucleotide sequenties uit de dataset van het Champignon-project.<br>
 	Voor specifieke resultaten kunt u het onderstaande formulier invullen en hierna wordt u door verwezen naar de bijbehorende 'BLAST Resultaten tabel' met ingevulde filteropties.<br>
 	Naast een 'BLAST Resultaten tabel' kunt u ook per BLAST de gebruikte parameters en andere informatie vinden in de 'BLAST Informatie tabel'.<br>
 	In de 'Sequentie Informatie tabel' kunt u de sequenties terugvinden die gebruikt zijn en de kwaliteitsscore staat hier ook in vermeld.<br>
-	Verder kunt u op deze website nog informatie vinden over het project zelf onder het kopje 'Het project'.</p>
+	Verder kunt u op deze website nog informatie vinden over het project, onder het kopje 'Het project'.</p>
 	</div>
 	<div class='formset'>
 	<h3>Filter Formulier BLAST resultaten.</h3>
-	<h4>Sequentie_ID:</h4>
+	<div class='formvak1'>
+	<h4>Sequentie_ID:<sup>i</sup><div class='filterinformatie'><p>Selecteer een specifiek Sequentie_ID, om allen de resultaten met dat ID te weergeven.</p></div></h4>
 	<select name='sequentieid' id='sequentieid'>
 	<option value=''></option>
 	"""+ids()+"""
 	</select>
-	<h4>Type BLAST:</h4>
+	<h4>Type BLAST:<sup>i</sup><div class='filterinformatie'><p>Selecteer &#233;&#233;n type blast, om alle resultaten met het geselecteerde type blast te weergeven.</p></div></h4>
 	<select name='typeblast' id='typeblast'>
 	<option value=''></option>
 	<option value='blastn'>blastn</option>
 	<option value='blastx'>blastx</option>
 	<option value='tblastx'>tblastx</option>
 	</select>
-	<h4>E-Value:</h4>
+	<h4>E-Value:<sup>i</sup><div class='filterinformatie'><p>Selecteer een waarde in het dropdownmenu, om alleen de resultaten te weergeven lager dan de gewenste e-value.</p></div></h4>
 	<select name='e_value' id='e_value'>
 	<option value=''></option>
 	"""+options()+"""
 	</select>
-	<h4>Bit-Score:</h4>
+	<h4>Bit-Score:<sup>i</sup><div class='filterinformatie'><p>Voer een getal in, zodat bij filtering alle resultaten hoger dan het getal weergeven worden.</p></div></h4>
 	<input type='text' name='bit_score' value=''>
-	<h4>Gaps:</h4>
+	<h4>Gaps:<sup>i</sup><div class='filterinformatie'><p>Selecteer een waarde in het dropdownmenu, om alleen de resultaten met een aantal gaps onder de geselecteerde waarde te weergeven.</p></div></h4>
 	<select name='gaps' id='gaps'>
 	<option value=''></option>
 	<option value='0'>0</option>
-	<option value='5'>5 ></option>
-	<option value='10'>10 ></option>
-	<option value='15'>15 ></option>
-	<option value='25'>25 ></option>
-	<option value='100'>100 ></option>
+	<option value='5'>< 5</option>
+	<option value='10'>< 10</option>
+	<option value='15'>< 15</option>
+	<option value='25'>< 25</option>
+	<option value='100'>< 100</option>
 	</select>
-	<h4>Identity Percentage:</h4>
+	</div>
+	<div class='formvak2'>
+	<h4></h4>
+	<h4>Identity Percentage:<sup>i</sup><div class='filterinformatie'><p>Voer een waarde in, om alleen de resultaten te weergeven hoger, dan de ingevoerde waarde.</p></div></h4>
 	<input type='text' name='ident_perc' value=''>
-	<h4>Positive Percentage:</h4>
+	<h4>Positive Percentage:<sup>i</sup><div class='filterinformatie'><p>Voer een waarde in, om alleen de resultaten te weergeven hoger, dan de ingevoerde waarde.</p></div></h4>
 	<input type='text' name='posit_perc' value=''>
-	<h4>Accessiecode:</h4>
+	<h4>Accessiecode:<sup>i</sup><div class='filterinformatie'><p>Kies een accessiecode, om alleen de resultaten te weergeven met deze specifieke accessiecode.</p></div></h4>
 	<select name='accessiecode' id='accessiecode'>
 	<option value=''></option>
 	"""+codes()+"""
 	</select>
-	<h4>Organisme/Eiwit:</h4> <select name='org_eiwit' id='org_eiwit'>
+	<h4>Organisme/Eiwit:<sup>i</sup><div class='filterinformatie'><p>Kies een waarde in het dropdownmenu, om alleen de resultaten met dit specifieke 'Organisme/Eiwit' te weergeven.</p></div></h4> <select name='org_eiwit' id='org_eiwit'>
 	<option value=''></option>
 	"""+orgs()+"""
 	</select><br><br>
+	<h4></h4>
 	<input type='submit' name='klik' value='Search'>
+	</div>
 	</div>
 	</form>"""
 #De blast_resultaten_table functie returnt een volledige tabel naar de pagina blast resultaten.
@@ -211,31 +236,32 @@ def BLAST_Resultaten_Table(req, queryline):
 	conn.close()
 	req.write('<div class="table_options">')
 	req.write("""<table><form value='filter' action='http://cytosine.nl/~owe4_bi1e_2/Python/HTMLWebinterface.py/BLAST_Resultaten' id='filter'>
-	<th align='left'><input type='submit' name='Filter' value='Filter'></th><th>Show Unicode:<input type='checkbox' name='show_unicode' value='1'></table></div>
+	<th align='left'><input type='submit' name='Filter' value='Filter'></th><th>Show Unicode:<sup>i</sup><div class='filterinformatie'><p>Activeer de button en zie ook de resultaten met een 'Unicode error.'</p></div><input type='checkbox' name='show_unicode' value='1'></table></div>
 	<div class="table">
 	<table>
-	<tr><th>Sequentie ID:<br><select name='sequentieid' id='sequentieid'>
+	<tr><th>Sequentie ID:<sup>i </sup><div class='filterinformatie'><p>Selecteer een specifiek Sequentie_ID, om allen de resultaten met dat ID te weergeven.</p></div><br><select name='sequentieid' id='sequentieid'>
 	<option value=''></option>
 	"""+ids()+"""
 	</select></th>
-	<th>Type BLAST:<br><select name='typeblast' id='typeblast'>
+	<th>Type BLAST:<sup>i </sup><div class='filterinformatie'><p>Selecteer &#233;&#233;n type blast, om alle resultaten met het geselecteerde type blast te weergeven.</p></div><br><select name='typeblast' id='typeblast'>
 	<option value=''></option>
 	<option value='blastn'>blastn</option>
 	<option value='blastx'>blastx</option>
 	<option value='tblastx'>tblastx</option>
 	</select></th>
-	<th>E-Value:<select name='e_value' id='e_value'>
+	<th>E-Value:<sup>i</sup><div class='filterinformatie'><p>Selecteer een waarde in het dropdownmenu, om alleen de resultaten te weergeven lager dan de gewenste e-value.</p></div>
+	<select name='e_value' id='e_value'>
 	<option value=''></option>
 	"""+options()+"""
 	</select>
 	</th>
-	<th>Bit-Score:
+	<th>Bit-Score:<sup>i</sup><div class='filterinformatie'><p>Voer een getal in, zodat bij filtering alle resultaten hoger dan het getal weergeven worden.</p></div>
 	<input type='text' name='bit_score' value=''>
 	</th>
 	<th>Score</th>
 	<th>Identities</th>
 	<th>Positives</th>
-	<th>Gaps:<select name='gaps' id='gaps'>
+	<th>Gaps:<sup>i</sup><div class='filterinformatie'><p>Selecteer een waarde in het dropdownmenu, om alleen de resultaten met een aantal gaps onder de geselecteerde waarde te weergeven.</p></div><select name='gaps' id='gaps'>
 	<option value=''></option>
 	<option value='0'>0</option>
 	<option value='5'>< 5</option>
@@ -245,15 +271,15 @@ def BLAST_Resultaten_Table(req, queryline):
 	<option value='100'>< 100</option>
 	</select>
 	</th>
-	<th>Identity Percentage: <input type='text' name='ident_perc' value=''>
+	<th>Identity Percentage:<sup>i</sup><div class='filterinformatie'><p>Voer een waarde in, om alleen de resultaten te weergeven hoger, dan de ingevoerde waarde.</p></div> <input type='text' name='ident_perc' value=''>
 	</th>
-	<th>Positive Percentage: <input type='text' name='posit_perc' value=''></th>
+	<th>Positive Percentage:<sup>i</sup><div class='filterinformatie'><p>Voer een waarde in, om alleen de resultaten te weergeven hoger, dan de ingevoerde waarde.</p></div> <input type='text' name='posit_perc' value=''></th>
 	<th>Total Aligned</th>
 	<th>Frame</th>
-	<th>Accessiecode: <select name='accessiecode' id='accessiecode'>
+	<th>Accessiecode:<sup>i</sup><div class='filterinformatie'><p>Kies een accessiecode, om alleen de resultaten te weergeven met deze specifieke accessiecode.</p></div> <select name='accessiecode' id='accessiecode'>
 	<option value=''></option>
 	"""+codes()+"""</select></th>
-	<th>Organisme/Eiwit: <select name='org_eiwit' id='org_eiwit'>
+	<th>Organisme/Eiwit:<sup>i</sup><div class='filterinformatie'><p>Kies een waarde in het dropdownmenu, om alleen de resultaten met dit specifieke 'Organisme/Eiwit' te weergeven.</p></div> <select name='org_eiwit' id='org_eiwit'>
 	<option value=''></option>
 	"""+orgs()+"""</select></th>
 	<th>Alignment</th></tr>""")
@@ -272,7 +298,7 @@ def BLAST_Resultaten_Table(req, queryline):
 		else:
 			eiwit = row[12]
 		alignment_data = row[13].split('\n')
-		alignment = alignment_data[0][:20]+'...\n'+alignment_data[1][:20]+'...\n'+alignment_data[2][:20]+'...\n'
+		alignment = alignment_data[0][:50]+'...\n'+alignment_data[1][:50]+'...\n'+alignment_data[2][:50]+'...\n'
 		new_row = [row[0],row[14],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],frame,accessiecode,eiwit,alignment]
 		count = -1
 		for data in new_row:
@@ -311,22 +337,22 @@ def BLAST_Informatie_Table(req, queryline):
 	req.write("<table><form value='filter' action='http://cytosine.nl/~owe4_bi1e_2/Python/HTMLWebinterface.py/BLAST_Informatie' id='filter'><th align='left'><input type='submit' name='Filter' value='Filter'></th></table></div>")
 	req.write('<div class="table">')
 	req.write('<table border=1>')
-	req.write("""<th>Sequentie ID:<br><select name='sequentieid' id='sequentieid'>
+	req.write("""<th>Sequentie ID:<sup>i </sup><div class='filterinformatie'><p>Selecteer een specifiek Sequentie_ID, om allen de resultaten met dat ID te weergeven.</p></div><br><select name='sequentieid' id='sequentieid'>
 	<option value=''></option>
 	"""+ids()+"""
 	</select></th>
-	<th>Type BLAST:<br><select name='typeblast' id='typeblast'>
+	<th>Type BLAST:<sup>i </sup><div class='filterinformatie'><p>Selecteer &#233;&#233;n type blast, om alle resultaten met het geselecteerde type blast te weergeven.</p></div><br><select name='typeblast' id='typeblast'>
 	<option value=''></option>
 	<option value='blastn'>blastn</option>
 	<option value='blastx'>blastx</option>
 	<option value='tblastx'>tblastx</option>
 	</select></th>
-	<th>Has Results:<br><select name='hasresults' id='hasresults'>
+	<th>Has Results:<sup>i</sup><div class='filterinformatie'><p>Selecteer 'Yes' or 'No' in de dropdownmenu, om alle resultaten die 'wel' of 'niet' BLAST resultaten hebben te weergeven.</p></div><br><select name='hasresults' id='hasresults'>
 	<option value=''></option>
 	<option value='1'>Yes</option>
 	<option value='0'>No</option>
 	</select></th>
-	<th>Datum:<br><select name='datum' id='datum'>
+	<th>Datum:<sup>i</sup><div class='filterinformatie'><p>Selecteer &#233;&#233;n speciefieke datum, om alleen de resultaten van deze datum te weergeven.</p></div><br><select name='datum' id='datum'>
 	<option value=''></option>
 	"""+dates()+"""
 	</select>
@@ -336,7 +362,7 @@ def BLAST_Informatie_Table(req, queryline):
 	<th>Database</th>
 	<th>Gap Costs</th>
 	<th>Low Complexity</th>
-	<th>Mask Lookup Only:<br><select name='masklookup' id='masklookup'>
+	<th>Mask Lookup Only:<sup>i</sup><div class='filterinformatie'><p>Selecteer 'Enabled' of 'Disabled', om alle resultaten te weergeven waarbij de 'Mask lookup only''Enabled of 'Disabled' was tijdens het BLASTEN.</p></div><br><select name='masklookup' id='masklookup'>
 	<option value=''></option>
 	<option value='1'>Enabled</option>
 	<option value='0'>Disabled</option>
@@ -382,17 +408,17 @@ def Sequentie_Informatie_Table(req, queryline):
 	req.write("<table><form value='filter' action='http://cytosine.nl/~owe4_bi1e_2/Python/HTMLWebinterface.py/Sequentie_Informatie' id='filter'><th	align='left'><input type='submit' name='Filter' value='Filter'></th></table></div>")
 	req.write('<div class="table">')
 	req.write('<table border=1>')
-	req.write("""<th>Type:<br><select name='type' id='type'>
+	req.write("""<th>Type:<sup>i</sup><div class='filterinformatie'><p>Selecteer 'Forward', om alle 'Forward' sequenties te weergeven en 'Reverse' voor alle 'Reverse' sequenties.</p></div><br><select name='type' id='type'>
 	<option value=''></option>
 	<option value='1'>Forward</option>
 	<option value='2'>Reverse</option>
 	</select>
 	</th>
-	<th>Sequentie ID:<br><select name='sequentieid' id='sequentieid'>
+	<th>Sequentie ID:<sup>i </sup><div class='filterinformatie'><p>Selecteer een specifiek Sequentie_ID, om allen de resultaten met dat ID te weergeven.</p></div><br><select name='sequentieid' id='sequentieid'>
 	<option value=''></option>
 	"""+ids()+"""
 	</select></th>
-	<th>Sequentie:<br><input type='text' name='sequentie'>
+	<th>Sequentie:<sup>i</sup><div class='filterinformatie'><p>Voer een/deel van een sequentie in het tekstvak, om alle resultaten te krijgen die matchen met deze/dit deel sequentie.</p></div><br><input type='text' name='sequentie'>
 	</th>
 	<th>Kwaliteitsscore:</th>
 	</tr></form>""")
@@ -509,7 +535,7 @@ def queryblastr(sequentieid='', typeblast='', e_value='', bit_score='', gaps='',
     if accessiecode != '':
         query += " AND i.Organisme_eiwit_ID = '{0}'".format(accessiecode)
     if org_eiwit != '':
-        query += " AND i.Organisme_eiwit_info = '{0}'".format(org_eiwit)
+        query += " AND i.Organisme_eiwit_info like '%{0}%'".format(org_eiwit)
     if show_unicode != '1':
 		query += " AND i.Organisme_eiwit_ID != 'NULL'"
 		query += " AND i.Organisme_eiwit_info != 'NULL'"
