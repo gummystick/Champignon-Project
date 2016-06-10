@@ -18,7 +18,8 @@ h1 {
 }
 
 .formset {
-	width: 45%;
+	height: 80%;
+	width: 100%;
 	padding: 5px;
 	background: #f2f2f2;
 	border: 2px solid #ccc;
@@ -37,7 +38,7 @@ h1 {
 }
 
 .formset input[type=text] {
-    width: 24%;
+    width: 24%	;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -46,7 +47,7 @@ h1 {
 }
 
 .formset select[name='sequentieid'] {
-	width: 24%;
+	width: 310px;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -57,7 +58,7 @@ h1 {
 }
 
 .formset select[name='accessiecode'] {
-	width: 24%;
+	width: 310px;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -68,7 +69,7 @@ h1 {
 }
 
 .formset select[name='org_eiwit'] {
-	width: 24%;
+	width: 310px;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -79,19 +80,19 @@ h1 {
 }
 
 .formset select:focus[name='sequentieid'] {
-    width: 57%;
+    width: 67%;
 }
 
 .formset select:focus[name='accessiecode'] {
-    width: 38%;
+    width: 48%;
 }
 
 .formset select:focus[name='org_eiwit'] {
-    width: 90%;
+    width: 70%;
 }
 
 .formset select {
-	width: 12%;
+	width: 120px;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -196,4 +197,39 @@ h1 {
 .table th {
     background-color: #4CAF50;
     color: white;
+}
+.informatiepagina {
+	margin: 10px;
+	padding: 5px;
+	border: 1px solid;
+	border-radius: 20px;
+	background: #f2f2f2;
+	font-size: 18px;
+}
+.formvak1 {
+	width:25%;
+	height: 60%;
+	position: absolute;
+}
+.formvak2 {
+	width:25%;
+	border-style: solid;
+	border-color: transparent;
+	height: 60%;
+	position: relative;
+	left: 30%;
+}
+.filterinformatie{
+	background-color: #3385ff;
+	border-radius: 10px;
+	padding: 2px;
+	display: none;
+}
+.filterinformatie p{
+	font-weight: normal;
+}
+sup:hover + .filterinformatie{
+	display: block;
+	position: absolute;
+	margin-left: 5%;
 }
