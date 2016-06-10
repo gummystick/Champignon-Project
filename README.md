@@ -1,4 +1,4 @@
-# Champignon-Project 
+# Champignon-Project
 
 Het project bestaat uit een Python script dat automatisch BLAST en een Python script met een stylesheet voor de webapplicatie.
 
