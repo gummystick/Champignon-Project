@@ -120,6 +120,11 @@ def bovenmenu():
 				<a href="http://cytosine.nl/~owe4_bi1e_2/Python/HTMLWebinterface/Het_Project">Het project</a>
 			</li>
 		</ul>
+		<ul>
+			<li>
+				<a href="http://cytosine.nl/~owe4_bi1e_2/Python/blast">Resultaten toevoegen</a>
+			</li>
+		<ul>
 	</div>"""
 #Deze functie returnt per pagina een aparte titel. De naam wordt in de pagina functie apart aangegeven.
 def title(titel):
