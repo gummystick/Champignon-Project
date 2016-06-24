@@ -7,6 +7,71 @@ h1 {
 	font-family: "Segoe UI",Arial,sans-serif;
 }
 
+.blast {
+	height: 125;
+	width: 100%;
+	padding: 10px;
+	background: #f2f2f2;
+	border: 2px solid #ccc;
+	font-family: Verdana,sans-serif;
+}
+
+.blast_form {
+	height: 625;
+	width: 100%;
+	padding: 10px;
+	background: #f2f2f2;
+	border: 2px solid #ccc;
+	font-family: Verdana,sans-serif;
+}
+
+.blast_form input[id='sequentie_id'] {
+	width:371px;
+}
+
+.blast_form input[type='submit'] {
+	width:125px;
+	background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.login {
+	height: 225px;
+	width: 300px;
+	padding: 10px;
+	background: #f2f2f2;
+	border: 2px solid #ccc;
+	font-family: Verdana,sans-serif;
+}
+
+.login input {
+	width: 90%	;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 12px 20px 12px 4px;
+	margin: 5px;
+}
+
+.login input[type='submit'] {
+	width:125px;
+	background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
 .info {
 	width: 99.31%;
 	padding: 5px;
